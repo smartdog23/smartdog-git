@@ -7,4 +7,6 @@ Smartdog GIT is a web interface for interacting with multiple git repositories.
 - commit history
 - diffs
 
-GitList was written in PHP, on top of the Laravel Frameword.
+GIT Server Web Interface was written in PHP, on top of the Laravel Framework.
+
+In development!
