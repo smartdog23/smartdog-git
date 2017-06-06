@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Gate;
 
 class RegisterController extends Controller
 {
@@ -20,7 +21,10 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers {
+        showRegistrationForm as traitShowRegistrationForm;
+        register as traitRegister;
+    }
 
     /**
      * Where to redirect users after registration.
@@ -36,7 +40,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('auth');
     }
 
     /**
@@ -67,5 +71,21 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function showRegistrationForm()
+    {
+        if(Gate::allows('manage-user')) {
+            return $this->traitShowRegistrationForm();
+        }
+        return redirect()->route('home');
+    }
+
+    public function register(Request $request)
+    {
+        if(Gate::allows('manage-user')) {
+            return $this->traitRegister($request);
+        }
+        return redirect()->route('home');
     }
 }
