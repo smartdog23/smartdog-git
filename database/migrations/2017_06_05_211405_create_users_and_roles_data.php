@@ -35,6 +35,11 @@ class CreateUsersAndRolesData extends Migration
                 ],
                 [
                     'id' => 2,
+                    'name' => 'Manager',
+                    'active' => true,
+                ],
+                [
+                    'id' => 3,
                     'name' => 'Developer',
                     'active' => true,
                 ]
