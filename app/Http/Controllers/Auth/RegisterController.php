@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Gate;
+use App\Role;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -21,10 +24,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers {
-        showRegistrationForm as traitShowRegistrationForm;
-        register as traitRegister;
-    }
+    use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -69,22 +69,55 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'role' => $data['role'],
             'password' => bcrypt($data['password']),
+            'active' => true,
         ]);
     }
 
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+//    public function registerx(Request $request)
+//    {
+//        $this->validator($request->all())->validate();
+//
+//        event(new Registered($user = $this->create($request->all())));
+//
+//        return redirect()->route('home');
+////        $this->guard()->login($user);
+//        //return $this->registered($request, $user)
+//         //   ?: redirect($this->redirectPath());
+//    }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function showRegistrationForm()
     {
         if(Gate::allows('manage-user')) {
-            return $this->traitShowRegistrationForm();
+            $roles = Role::all();
+            return view('auth.register', ['roles' => $roles]);
         }
         return redirect()->route('home');
     }
 
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function register(Request $request)
     {
         if(Gate::allows('manage-user')) {
-            return $this->traitRegister($request);
+            $this->validator($request->all())->validate();
+            event(new Registered($user = $this->create($request->all())));
         }
         return redirect()->route('home');
     }
