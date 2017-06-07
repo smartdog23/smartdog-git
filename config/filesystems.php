@@ -63,6 +63,11 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        'repositories' => [
+            'driver' => 'local',
+            'root' => env('GIT_REPOSITORIES'),
+        ],
+
     ],
 
 ];
