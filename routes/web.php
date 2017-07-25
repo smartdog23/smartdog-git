@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get('/repository/create', 'RepositoryController@create')->name('repository.create');
+Route::post('/repository/store', 'RepositoryController@store')->name('repository.store');
