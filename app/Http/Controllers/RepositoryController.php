@@ -24,7 +24,7 @@ class RepositoryController extends Controller
     public function store()
     {
         $data = request()->all();
-        $gitRepoPath = env('GIT_REPOSITORIES').$data['inputRepositoryName'];
+        $gitRepoPath = env('GIT_REPOSITORIES').$data['inputRepositoryName'].'.git';
         $client = new Client;
         $repository = $client->createRepository($gitRepoPath, true);
         return redirect()->route('home');
