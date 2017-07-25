@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
                     @foreach($repositories as $repository)
-                        <div>{{ $repository }}</div>
+                        <div><a href="{{ route('repository.open', ['repositoryName' => $repository]) }}">{{ $repository }}</a></div>
                     @endforeach
                 </div>
             </div>

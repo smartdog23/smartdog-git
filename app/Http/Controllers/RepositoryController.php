@@ -29,4 +29,15 @@ class RepositoryController extends Controller
         $repository = $client->createRepository($gitRepoPath, true);
         return redirect()->route('home');
     }
+
+    public function open($repositoryName)
+    {
+        $client = new Client;
+        $gitRepoPath = env('GIT_REPOSITORIES').$repositoryName.'.git';
+        $repository = $client->getRepository($gitRepoPath);
+
+        dump($repository);
+
+        //return view('repository.open');
+    }
 }
