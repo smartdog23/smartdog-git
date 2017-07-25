@@ -8,7 +8,9 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                    You are logged in!
+                    @foreach($repositories as $repository)
+                        <div>{{ $repository }}</div>
+                    @endforeach
                 </div>
             </div>
         </div>

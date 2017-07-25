@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\Repository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $repositoryHelper = new Repository();
+        $repositories = $repositoryHelper->getRepositoryList();
+
+        return view('home', ['repositories' => $repositories]);
     }
 }
