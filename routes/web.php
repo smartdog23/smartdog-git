@@ -23,4 +23,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/repository/create', 'RepositoryController@create')->name('repository.create');
 Route::post('/repository/store', 'RepositoryController@store')->name('repository.store');
 
-Route::get('/repository/open/{repositoryName}', 'RepositoryController@open')->name('repository.open');
+//Route::get('/repository/open/{repository}/{branch}/{tree?}/{other?}', 'RepositoryController@open')->name('repository.open')->where('other', '(.*)');;
+Route::get('/repository/{repository}/{type?}/{branch?}/{tree?}', 'RepositoryController@open')->name('repository.open')->where('tree', '(.*)');;

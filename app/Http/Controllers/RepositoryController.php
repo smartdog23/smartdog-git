@@ -30,14 +30,35 @@ class RepositoryController extends Controller
         return redirect()->route('home');
     }
 
-    public function open($repositoryName)
+    public function open($repository, $type = 'tree', $branch = 'master', $tree = null)
     {
         $client = new Client;
-        $gitRepoPath = env('GIT_REPOSITORIES').$repositoryName.'.git';
-        $repository = $client->getRepository($gitRepoPath);
+        $gitRepoPath = env('GIT_REPOSITORIES').$repository.'.git';
+        $repositoryLoad = $client->getRepository($gitRepoPath);
 
-        dump($repository);
+        if($type == 'tree') {
+            $files = $repositoryLoad->getTree($tree ? "$branch:\"$tree\"/" : $branch)->output();
 
-        //return view('repository.open');
+            foreach ($files as &$file) {
+                $typeFile = 'blob';
+                if($file['type'] == 'folder') {
+                    $typeFile = 'tree';
+                }
+                $url = '/repository/'.$repository.'/'.$typeFile.'/'.$branch.'/'.$tree.'/'.$file['name'];;
+                $url = str_replace('//', '/', $url);
+                $file['url'] = $url;
+            }
+            return view('repository.tree', ['url' => $url, 'files' => $files]);
+
+        } else {
+            
+            $url = $branch.':'.$tree;
+            $blob = $repositoryLoad->getBlob($url)->output();
+            return view('repository.blob', ['blob' => $blob]);
+        }
+
+
+
+
     }
 }
